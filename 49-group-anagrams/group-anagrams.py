@@ -1,14 +1,18 @@
 class Solution(object):
     def groupAnagrams(self, strs):
-        res = []
-        mydict = {}
-
-        for elem in strs:
-            if ''.join(sorted(elem)) in mydict:
-                mydict[''.join(sorted(elem))].append(elem)
-            else:
-                mydict[''.join(sorted(elem))] = [elem]
-        for elem in mydict.values():
-            res.append(elem)
+        res = {}
         
-        return res
+        for elem in strs:
+            c = [0] * 26
+            
+            for char in elem:
+                pos = ord(char) - ord('a')
+                c[pos] += 1
+
+            c = tuple(c)
+
+            if c in res:
+                res[c].append(elem)
+            else:
+                res[c] = [elem]         
+        return list(res.values())
