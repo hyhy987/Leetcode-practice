@@ -6,19 +6,21 @@
 #         self.right = right
 class Solution(object):
     def inorderTraversal(self, root):
+        if root == None:
+            return []
         res = []
+        stack = []
+        curr = root
 
-        def dfs(res, curr):
-            if curr:
-                dfs(res, curr.left)
-
-                res.append(curr.val)
-
-                dfs(res, curr.right)
-
-        dfs(res, root)
-
+        while curr or stack:
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            curr = stack.pop()
+            res.append(curr.val)
+            curr = curr.right
         return res
+
         
             
         
