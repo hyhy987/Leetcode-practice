@@ -6,16 +6,19 @@
 #         self.right = right
 class Solution(object):
     def isValidBST(self, root):
-        def valid(node, left, right):
-            if not node:
-                return True
-            
-            if not (node.val < right and node.val > left):
-                return False
-            
-            return (valid(node.left, left, node.val) and 
-            valid(node.right, node.val, right))
+        prev = [float('-inf')]
         
-        return valid(root, float("-inf"), float("inf"))
+        def dfs(node):
+            if node == None:
+                return True
+            if not dfs(node.left):
+                return False
+            if node.val <= prev[0]:
+                return False
+
+            prev[0] = node.val
+            
+            return dfs(node.right)
     
-    
+        return dfs(root)
+        
