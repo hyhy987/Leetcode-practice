@@ -1,19 +1,16 @@
 class Solution(object):
     def maxArea(self, height):
-        l = 0
-        r = len(height) - 1
-        base = len(height) - 1
-        maxArea = 0
+        left = 0 
+        right = len(height) - 1
+        vol = 0
 
-        for i in range (len(height)):
-            newArea = min(height[l], height[r]) * (r-l)
-            if newArea > maxArea:
-                maxArea = newArea
+        while left < right:
+            currVol = min(height[left], height[right]) * (right - left)
+            vol = max(vol, currVol)
 
-            if height[r] < height[l]:
-                r -= 1
+            if height[left] <= height[right]:
+                left += 1
             else:
-                l += 1
-        return maxArea
-            
-        
+                right -= 1
+
+        return vol
