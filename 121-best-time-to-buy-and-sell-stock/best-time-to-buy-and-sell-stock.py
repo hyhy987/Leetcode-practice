@@ -1,12 +1,16 @@
 class Solution(object):
     def maxProfit(self, prices):
-        max_diff = 0
-        min_elem = 99999
-        for elem in prices:
-            if (elem - min_elem) > max_diff:
-                max_diff = elem - min_elem
-            if elem < min_elem:
-                min_elem = elem
-        return max_diff
-            
+        l, r = 0, 1
+        profit = 0
+
+        while r < len(prices):
+            if prices[l] > prices[r]:
+                l = r
+                r += 1
+            else:
+                profit = max(prices[r] - prices[l], profit)
+                r += 1
+        return profit  
+
+        
         
