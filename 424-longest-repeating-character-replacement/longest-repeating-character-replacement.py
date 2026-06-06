@@ -1,20 +1,33 @@
 class Solution(object):
     def characterReplacement(self, s, k):
-        count = {}
-        res = 0
+        hashMap = dict()
         l = 0
-        maxf = 0
+        res = 0
+
         for r in range(len(s)):
-            count[s[r]] = 1 + count.get(s[r], 0)
-            maxf = max(maxf, count[s[r]])
-
-            while (r - l + 1) - maxf > k:
-                count[s[l]] -= 1
-                l += 1
-
-            res = max(res, r - l + 1)
-        
-        return res
-        
             
-        
+            if s[r] not in hashMap:
+                hashMap[s[r]] = 1
+            else:
+                hashMap[s[r]] += 1
+
+            windowLen = r - l + 1
+
+            maxCount = 0
+            for _, count in hashMap.items():
+                if count > maxCount:
+                    maxCount = count
+            
+            if windowLen - maxCount <= k:
+                res = max(windowLen, res)
+
+            else:
+                while windowLen - maxCount > k:
+                    hashMap[s[l]] -= 1
+                    l += 1
+                    maxCount = 0
+                    windowLen -= 1
+                    for count in hashMap.values():
+                        if count > maxCount:
+                            maxCount = count
+        return res
