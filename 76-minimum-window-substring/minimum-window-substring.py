@@ -1,38 +1,39 @@
 class Solution(object):
     def minWindow(self, s, t):
-        tdict = dict()
-        window = dict() 
-        res, resLen = [-1,-1], float("infinity")
-        l = 0
-
-        if len(t) > len(s):
+        if t == "":
             return ""
+        hashT = {}
+        hashS = {}
+        l, r = 0, 0
+        res, resLen = [-1, -1], float('inf')
+        
 
-        for i in range(len(t)):
-            if t[i] in tdict:
-                tdict[t[i]] += 1
-            else:
-                tdict[t[i]] = 1
+        # Build hashMap for t first
+        for c in t:
+            hashT[c] = 1 + hashT.get(c, 0)
 
-        have, need = 0, len(tdict)
+        have, need = 0, len(hashT)
 
+        # Sliding window
         for r in range(len(s)):
             c = s[r]
-            window[c] = 1 + window.get(c, 0)
+            hashS[c] = 1 + hashS.get(c, 0)
 
-            if c in tdict and window[c] == tdict[c]:
+            if c in hashT and hashS[c] == hashT[c]:
                 have += 1
-            
+
             while have == need:
-                if (r - l + 1) < resLen:
+                # Update result
+                if (r - l + 1 ) < resLen:
                     res = [l, r]
-                    resLen = (r - l + 1)
-                
-                window[s[l]] -= 1
-                if s[l] in tdict and window[s[l]] < tdict[s[l]]:
+                    resLen = r - l + 1
+                hashS[s[l]] -= 1
+
+                if s[l] in hashT and hashS[s[l]] < hashT[s[l]]:
                     have -= 1
-                
                 l += 1
-        l, r = res
-        return s[l: r+1] if resLen != float("infinity") else ""
-        
+                
+        if resLen != float("inf"):
+            return s[res[0]: res[1] + 1]
+        else:
+            return ""            
