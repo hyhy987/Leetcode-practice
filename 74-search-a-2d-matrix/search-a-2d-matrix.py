@@ -1,29 +1,30 @@
-class Solution(object):
-    def searchMatrix(self, matrix, target):
-        rows, cols = len(matrix), len(matrix[0])
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        numRows = len(matrix)
+        numCols = len(matrix[0])
 
-        top = 0
-        bottom = rows - 1
-        while top <= bottom:
-            mid = top + (bottom - top) // 2
-            if target > matrix[mid][-1]:
-                top = mid + 1
-            elif target < matrix[mid][0]:
-                bottom = mid - 1
-            else:
+        startRow, endRow = 0, numRows - 1
+        # Find row, target row is the endRow
+        while startRow < endRow: 
+            midRow = startRow + (endRow - startRow) // 2 
+            if matrix[midRow][0]<= target <= matrix[midRow][numCols-1]:
+                endRow = midRow
                 break
-        if top > bottom:
-            return False
-        row = top + (bottom - top) // 2
-        begin = 0
-        end = len(matrix[0])
-        while begin < end:
-            mid = begin + (end - begin)//2
-            if target <= matrix[row][mid]:
-                end = mid
+            elif target < matrix[midRow][0]:
+                endRow = midRow
             else:
-                begin = mid + 1
-        if matrix[row][begin] == target:
-            return True
-        return False
+                startRow = midRow + 1
+
+        # Find col 
+        startCol, endCol = 0, numCols - 1
+
+        while startCol < endCol:
+            midCol = startCol + (endCol - startCol) // 2
+            if target <= matrix[endRow][midCol]:
+                endCol = midCol
+            else:
+                startCol = midCol + 1
+
+        print(matrix[endRow][endCol])
         
+        return matrix[endRow][endCol] == target
